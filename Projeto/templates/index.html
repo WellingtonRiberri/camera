@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estacionamento</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .status {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+
+        .vaga {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 10px;
+            padding: 20px;
+            text-align: center;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .vaga:hover {
+            transform: scale(1.05);
+        }
+
+        .vaga h2 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .vaga p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .disponivel {
+            color: #00cc00;
+        }
+
+        .ocupada {
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Estado do Estacionamento</h1>
+    </header>
+    <div class="status">
+        <div class="vaga">
+            <h2>Vaga 1</h2>
+            <p>Status: <span id="status_vaga1" class="disponivel">Disponível</span></p>
+        </div>
+        <div class="vaga">
+            <h2>Vaga 2</h2>
+            <p>Status: <span id="status_vaga2" class="ocupada">Ocupada</span></p>
+        </div>
+        <div class="vaga">
+            <h2>Vaga 3</h2>
+            <p>Status: <span id="status_vaga3" class="disponivel">Disponível</span></p>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        const socket = io.connect('http://' + document.domain + ':' + location.port);
+        console.log(socket)
+    
+        socket.on('update_status', function(data) {
+            console.log('Recebeu dados do servidor:', data);
+    
+            document.getElementById('status_vaga1').textContent = data.vaga1 ? 'Ocupada' : 'Disponível';
+            document.getElementById('status_vaga1').className = data.vaga1 ? 'ocupada' : 'disponivel';
+    
+            document.getElementById('status_vaga2').textContent = data.vaga2 ? 'Ocupada' : 'Disponível';
+            document.getElementById('status_vaga2').className = data.vaga2 ? 'ocupada' : 'disponivel';
+    
+            document.getElementById('status_vaga3').textContent = data.vaga3 ? 'Ocupada' : 'Disponível';
+            document.getElementById('status_vaga3').className = data.vaga3 ? 'ocupada' : 'disponivel';
+        });
+    </script>
+    </body>
+    </html>
